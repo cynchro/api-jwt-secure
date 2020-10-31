@@ -253,8 +253,6 @@ Create a group for the secure routes
  });
 ```
 
-Source: https://www.nigmacode.com/laravel/JWT-en-Laravel
-
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)

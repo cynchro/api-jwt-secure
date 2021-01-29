@@ -253,6 +253,8 @@ Create a group for the secure routes
  });
 ```
 
+If you have a error "TypeError: Tymon\JWTAuth\JWT::fromUser(): Argument #1 ($user) must be of type Tymon\JWTAuth\Contracts\JWTSubject, App\User given," please check if you put code line "class User extends Authenticatable implements JWTSubject" on User.php 
+
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)

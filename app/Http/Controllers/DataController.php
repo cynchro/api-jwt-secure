@@ -86,4 +86,19 @@ class DataController extends Controller
     {
         //
     }
+
+    public function test()
+    {
+        echo 'datos publicos';
+    }
+
+    public function admin()
+    {
+        echo 'ADMIN';
+    }
+
+    public function user()
+    {
+        echo 'USER';
+    }
 }

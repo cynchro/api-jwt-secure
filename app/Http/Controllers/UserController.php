@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -20,8 +21,47 @@ class UserController extends Controller
         } catch (JWTException $e) {
             return response()->json(['error' => 'could_not_create_token'], 500);
         }
-        return response()->json(compact('token'));
+
+               
+       $SQL = "SELECT
+               user_roles.user_id,
+               user_roles.role_id,
+               roles.id,
+               roles.name
+               FROM
+               user_roles
+               INNER JOIN
+               roles
+               ON
+               (user_roles.role_id=roles.id)
+               WHERE
+               (user_roles.user_id=".JWTAuth::User()->id.")
+               ";
+       $rol = DB::select($SQL);
+
+       $roles = array();
+       
+       foreach($rol as $role) {
+            
+           $roleArr = [
+               $role->name
+           ];
+
+           $roles[] = $roleArr;
+       }
+       $data = array();
+
+       $data = array(
+           "id"=>JWTAuth::User()->id, 
+           "username"=>JWTAuth::User()->name,
+           "email"=>JWTAuth::User()->email,
+           "roles"=>$roleArr,
+           "token"=>$token,
+           "tokenType"=>"Bearer"
+       );
+       return $data;die;
     }
+    
     public function getAuthenticatedUser()
     {
         try {
@@ -37,6 +77,7 @@ class UserController extends Controller
         }
         return response()->json(compact('user'));
     }
+
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -58,5 +99,13 @@ class UserController extends Controller
         $token = JWTAuth::fromUser($user);
         
         return response()->json(compact('user','token'),201);
+    }
+
+    public function all(Request $request)
+    {
+        $SQL = "SELECT * FROM users";
+        $users = DB::select($SQL);
+
+        return json_encode($users);
     }
 }

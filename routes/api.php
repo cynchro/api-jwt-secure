@@ -18,7 +18,19 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-    Route::group(['middleware' => ['jwt.verify']], function() {
-        Route::get('data/', 'DataController@index');
-    });
+Route::post('auth/signin', 'UserController@authenticate');
+
+Route::post('auth/signup', 'UserController@register');
+
+Route::post('auth/registered', 'UserController@getAuthenticatedUser');
+
+Route::get('all', 'DataController@test');
+
+Route::get('admin', 'DataController@admin');
+
+Route::get('user/all', 'UserController@all');
+
+Route::group(['middleware' => ['jwt.verify']], function() {
+    Route::get('data/', 'DataController@index');
+});
 
